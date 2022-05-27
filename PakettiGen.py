@@ -18,17 +18,18 @@ kumpi= ["RRQ","WRQ"]
 #tai WRQ request
 #param 2, kertoo kumpi operaatio
 def palauta_RRQ_tai_WRQ(tied_nimi, opr):
-    rrq = nt
+    print(opr, " ", kumpi[0])
+    q = nt
     if opr.upper() == kumpi[0]:
-        rrq += bytes(opk[0])
+        q += bytes(opk[0])
     
     elif opr.upper() == kumpi[1]:
-        rrq += bytes([opk[1]])
+        q += bytes([opk[1]])
 
-    rrq += str.encode(tied_nimi) + nt
-    rrq += str.encode(moodi) + nt
+    q += str.encode(tied_nimi) + nt
+    q += str.encode(moodi) + nt
     
-    return rrq
+    return q
 
    
 #========================================================
@@ -67,8 +68,8 @@ def palauta_ERROR(err_koodi):
 
 # ack-paketti, onko validi
 def varmista_ack(ack_data, tunniste):
-    print(ack_data[1:2])
-    if ack_data[1:2] == bytes([opk[3]]):
+    print(ack_data[:2])
+    if ack_data[:2] == bytes([opk[3]]):
         try:
             #testataan block
             if int.from_bytes(data[2:4], byteorder="big") == tunniste:
@@ -77,6 +78,7 @@ def varmista_ack(ack_data, tunniste):
             return False
     else:
         return False
+        
 # data, onko validi
 def varmista_data(data, tunniste):
     print(data[1:2], " ", bytes([opk[2]]))

@@ -24,12 +24,13 @@ def laheta_tied(v_osoite, tied_nimi, luku, paketti, soketti):
             #1,2
             for i in range(0, len(tied_data), tavu_lkm2):
                 print("Iteraatio: ", i)
-                #latauspalkki visualisoimaan prosessia
-                palkki(i+1, len(tied_data), tila='Tila:', palkin_pituus=60, merkki="+")
                 t_data_paketti = PakettiGen.palauta_DATA(tied_data[i:i + tavu_lkm2], block)
                 soketti.sendto(t_data_paketti, osoite)
+                #latauspalkki visualisoimaan prosessia
+                palkki(i+1, len(tied_data), tila='Tila:', palkin_pituus=60, merkki="+")
 
-                osoite_n_data = time_out(v_osoite, 3, t_data_paketti, soketti)
+
+                osoite_n_data = time_out(v_osoite, 1, t_data_paketti, soketti)
                 block += 1
 
             print("Tiedosto lähetetty!")
@@ -82,6 +83,7 @@ def time_out(v_osoite, luku, v_paketti, soketti):
                 if luku == 1:
                     
                     if PakettiGen.varmista_ack(data, tunniste) == True:
+                        print("Ack-0-paketti validi!")
                         break
                     
                     else:
@@ -90,6 +92,7 @@ def time_out(v_osoite, luku, v_paketti, soketti):
                 elif luku == 2:
                 
                     if PakettiGen.varmista_data(data, tunniste) == True:
+                        print("Data-paketti oli validi")
                         break
                     else:
                         print("Data-paketti oli virheellinen, uudelleen lähetetään...")
